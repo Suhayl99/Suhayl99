@@ -12,19 +12,26 @@ import uz.itech.myapplication.api.Api
 import uz.itech.myapplication.databinding.ActivityGalleryBinding
 import uz.itech.myapplication.model.PhotoModel
 import uz.itech.myapplication.view.PhotoAdapter
+import javax.inject.Inject
 
 class GalleryActivity : AppCompatActivity() {
     lateinit var binding:ActivityGalleryBinding
+    @Inject
+    lateinit var api: Api
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MyApp.app.appComponent.inject(this)
+
         binding= ActivityGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.recycler.layoutManager=GridLayoutManager(this,2)
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).build()
-
-        val api = retrofit.create(Api::class.java)
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://jsonplaceholder.typicode.com/")
+//            .client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).build()
+//
+//        val api = retrofit.create(Api::class.java)
         api.getPhotos().enqueue(object : Callback<List<PhotoModel>>{
             override fun onResponse(
                 call: Call<List<PhotoModel>>,

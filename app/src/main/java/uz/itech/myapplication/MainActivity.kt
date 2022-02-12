@@ -12,11 +12,20 @@ import uz.itech.myapplication.api.Api
 import uz.itech.myapplication.databinding.ActivityMainBinding
 import uz.itech.myapplication.model.PostModel
 import uz.itech.myapplication.view.PostAdapter
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
     lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var api:Api
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MyApp.app.appComponent.inject(this)
+
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -24,9 +33,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this,GalleryActivity::class.java))
         }
 
-        val retrofit= Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/")
-            .client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).build()
-        val api = retrofit.create(Api::class.java)
+//        val retrofit= Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/")
+//            .client(OkHttpClient.Builder().build()).addConverterFactory(GsonConverterFactory.create()).build()
+//        val api = retrofit.create(Api::class.java)
             binding.recycler.layoutManager=LinearLayoutManager(this)
         api.getPosts().enqueue(object : Callback<List<PostModel>>{
             override fun onResponse(
